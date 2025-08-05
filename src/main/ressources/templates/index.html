@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Tsinjo - Fonds d'urgence</title>
+</head>
+<body>
+<form action="/donate" method="post">
+    <input type="text" name="fullName" placeholder="Nom complet" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="number" name="amount" step="0.01" placeholder="Montant" required>
+    <select name="method" required>
+        <option value="MOBILE_MONEY">Mobile Money</option>
+        <option value="CREDIT_CARD">Carte Bancaire</option>
+    </select>
+    <button type="submit">Faire un don</button>
+</form>
+
+<div th:each="item : ${timeline}">
+    <div th:if="${item instanceof T(com.tsinjo.demo.domain.Donation)}">
+        <h3>DON</h3>
+        <p th:text="${item.donor.fullName} + ' (' + ${item.donor.email} + ')'"></p>
+        <p th:text="'Montant: ' + ${item.payment.amount} + ' ' + ${item.payment.method}"></p>
+        <p th:text="'Date: ' + ${#temporals.format(item.payment.date, 'dd/MM/yyyy HH:mm')}"></p>
+    </div>
+
+    <div th:if="${item instanceof T(com.tsinjo.demo.domain.Help)}">
+        <h3>AIDE</h3>
+        <p th:text="${item.beneficiary.fullName} + ' (' + ${item.beneficiary.email} + ')'"></p>
+        <p th:text="'Montant: ' + ${item.payment.amount} + ' ' + ${item.payment.method}"></p>
+        <p th:text="'Motif: ' + ${item.accidentDescription}"></p>
+        <p th:text="'Date: ' + ${#temporals.format(item.payment.date, 'dd/MM/yyyy HH:mm')}"></p>
+    </div>
+    <hr>
+</div>
+</body>
+</html>
